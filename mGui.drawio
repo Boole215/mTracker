@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2021-06-08T23:54:38.784Z" agent="5.0 (Windows)" etag="wyE1_L2LVVYxsRZEPW8I" version="14.6.11" type="github">
+<mxfile host="app.diagrams.net" modified="2021-06-09T00:07:03.954Z" agent="5.0 (Windows)" etag="dZxvznXND3Saa-4AKVYY" version="14.6.11" type="github">
   <diagram id="cAkSfmcRof5YzapApIng" name="Page-1">
     <mxGraphModel dx="2272" dy="819" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
@@ -205,7 +205,7 @@
         <mxCell id="Wb6nElrMa-7b8kM3IpfW-86" value="&lt;div&gt;1.list&lt;/div&gt;&lt;div&gt;2.list&lt;br&gt;&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
           <mxGeometry x="350" y="420" width="40" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="Wb6nElrMa-7b8kM3IpfW-89" value="&#xa;State info&#xa;&#xa;State tree would be something like:&#xa;root - cards - 0 - Title&#xa;                           - coverUrl&#xa;                           - synopsis&#xa;                           - chapters                                &#xa;                           -seriesID                      &#xa;&#xa;                      - 1 - ...&#xa;&#xa;                      - ...&#xa;&#xa;&#xa;&#xa;" style="text;strokeColor=none;fillColor=none;spacing=5;spacingTop=-20;overflow=hidden;rounded=0;spacingBottom=0;whiteSpace=wrap;" vertex="1" parent="1">
+        <mxCell id="Wb6nElrMa-7b8kM3IpfW-89" value="&#xa;State info&#xa;&#xa;State tree would be something like:&#xa;root - cards - 0 - Title&#xa;                           - Imgurl&#xa;                           - desc&#xa;                           - chapters                                &#xa;                           -seriesID                      &#xa;&#xa;                      - 1 - ...&#xa;&#xa;                      - ...&#xa;&#xa;&#xa;&#xa;" style="text;strokeColor=none;fillColor=none;spacing=5;spacingTop=-20;overflow=hidden;rounded=0;spacingBottom=0;whiteSpace=wrap;" vertex="1" parent="1">
           <mxGeometry x="-110" y="510" width="250" height="230" as="geometry" />
         </mxCell>
         <mxCell id="Wb6nElrMa-7b8kM3IpfW-94" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="Wb6nElrMa-7b8kM3IpfW-92" target="Wb6nElrMa-7b8kM3IpfW-93">
@@ -265,11 +265,29 @@
         <mxCell id="Wb6nElrMa-7b8kM3IpfW-106" value="Toggle settings visibility" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="470" y="910" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="Wb6nElrMa-7b8kM3IpfW-112" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="Wb6nElrMa-7b8kM3IpfW-110" target="Wb6nElrMa-7b8kM3IpfW-93">
+        <mxCell id="Wb6nElrMa-7b8kM3IpfW-112" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="Wb6nElrMa-7b8kM3IpfW-113" target="Wb6nElrMa-7b8kM3IpfW-93">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="Wb6nElrMa-7b8kM3IpfW-110" value="Use data from API to add another entry to cards for the series" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="Wb6nElrMa-7b8kM3IpfW-116" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="Wb6nElrMa-7b8kM3IpfW-110" target="Wb6nElrMa-7b8kM3IpfW-115">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Wb6nElrMa-7b8kM3IpfW-110" value="Parse data specified in state info from data received" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="130" y="750" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Wb6nElrMa-7b8kM3IpfW-113" value="Generate a new card using this data" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="320" y="620" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Wb6nElrMa-7b8kM3IpfW-117" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="Wb6nElrMa-7b8kM3IpfW-115" target="Wb6nElrMa-7b8kM3IpfW-113">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Wb6nElrMa-7b8kM3IpfW-115" value="store series info in global state, under cards using the current size" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="120" y="610" width="140" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="Wb6nElrMa-7b8kM3IpfW-119" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;shape=link;" edge="1" parent="1" source="Wb6nElrMa-7b8kM3IpfW-118" target="Wb6nElrMa-7b8kM3IpfW-115">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Wb6nElrMa-7b8kM3IpfW-118" value="Assuming there are two cards already present under cards in the global state, then next series added would be stored using the key &quot;2&quot;. Zero indexing is used when storing" style="text;html=1;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;perimeterSpacing=1;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="-210" y="745" width="180" height="120" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
