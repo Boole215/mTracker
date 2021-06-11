@@ -8,25 +8,44 @@ import { createSlice } from'@reduxjs/toolkit'
 export const feedCardSlice = createSlice({
     name:"feedcard",
     initialState: {
+        /*
         title:'placeholder',
         chapters:[
             "something"
         ],
         seriesID:"0",
         showInfo:false,
-
+        */
+        cards:{},
+        cardCount: 0,
     },
     reducers: {
-        mouseInside: (state) => {
-            state.showInfo = true
+        // mouse actions receive the card's ID as the payload in order to determine
+        // which specific card to blur
+        mouseInside: (state, action) => {
+            state.cards[action.payload].showInfo = true
         },
-        mouseOutside: (state) => {
-            state.showInfo = false
+        mouseOutside: (state, action) => {
+            state.cards[action.payload].showInfo = false
+        },
+
+        // function receives series ID as payload to use for api calls
+        // TODO set up mangadex API calls
+        pushID:  (state, action) => {
+
+
+            state.cards[state.cardCount] = {}
+            state.cards[state.cardCount].seriesID = action.payload
+            state.cards[state.cardCount].seriesTitle = "Placeholder Title"
+            state.cards[state.cardCount].chapters = {}
+            state.cards[state.cardCount].showInfo = false
+            state.cardCount += 1
+
         },
 
     },
 })
 
-export const { mouseInside, mouseOutside } = feedCardSlice.actions
+export const { mouseInside, mouseOutside, pushID } = feedCardSlice.actions
 
 export default feedCardSlice.reducer

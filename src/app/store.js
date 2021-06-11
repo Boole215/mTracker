@@ -1,20 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 import feedCardReducer from "../features/card/cardSlice"
 import addCardReducer from "../features/addCard/addCardSlice"
+import addDialogueReducer from "../features/addDialogue/addDialogueSlice"
 
 // It seems like adding an initialState is a moot point
 export default configureStore({
-    initialState:{
-        cards:{},
-        cardCount:0,
-        addingFeed: false,
-        formValue: "",
-        dialogField:null,
-
-    },
     reducer: {
         FeedCard:feedCardReducer,
         AddCard:addCardReducer,
+        addDialogue:addDialogueReducer,
     },
 })
 

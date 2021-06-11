@@ -12,7 +12,6 @@ import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
 import CardMedia from "@material-ui/core/CardMedia";
 import CardActionArea from "@material-ui/core/CardActionArea";
-import {CardContent} from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 
 
@@ -46,24 +45,23 @@ const useStyles = makeStyles({
     }
 });
 
-export function FeedCard(){
+// add props to be access stuff
+export function FeedCard(props){
 
     const dispatch = useDispatch()
-    const title = "Placeholder"
+    const crntTitle = useSelector((state) => state.FeedCard.cards[props.id])
     const desc = "This is a description!"
     const classes = useStyles()
 
-    const doBlur = useSelector((state) => state.FeedCard.showInfo ? classes.blurImg : null)
+    const doBlur = useSelector((state) => state.FeedCard.cards[props.id].showInfo ? classes.blurImg : null)
 
     return(
         <Grid item xs={2}>
             <Card elevation={3} className={classes.root}>
                 <CardActionArea>
 
-
-
-                    <div onMouseEnter={() => dispatch(mouseInside())} onMouseLeave={() => dispatch(mouseOutside())}>
-                        {doBlur ? <Typography gutterBottom className={classes.font} variant="h5" component="h5">This is an example of text</Typography> : null}
+                    <div onMouseEnter={() => dispatch(mouseInside(props.id))} onMouseLeave={() => dispatch(mouseOutside(props.id))}>
+                        {doBlur ? <Typography gutterBottom className={classes.font} variant="h5" component="h5">{crntTitle.seriesTitle}</Typography> : null}
                         <CardMedia component="img" image={rotundCat} title="Large Cat" className={`${classes.media} ${doBlur ? classes.blurImg : null}`}/>
                     </div>
 
