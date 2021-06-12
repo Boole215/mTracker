@@ -1,5 +1,5 @@
 import React from 'react'
-
+import "./index.css"
 import { AddCard } from "./features/addCard/addCard"
 import { AddDialogue } from "./features/addDialogue/addDialogue"
 import { Provider } from "react-redux";
@@ -12,14 +12,17 @@ import '@fontsource/roboto'
 import makeStyles from "@material-ui/core/styles/makeStyles";
 
 const useStyles = makeStyles({
-   addPos:{
-       position:"fixed",
-       bottom:0,
-       left:"100px",
-       marginRight: 10,
-       marginBottom: 10,
+    addPos:{
+        position:"fixed",
+        bottom:0,
+        left:"100px",
+        marginRight: 10,
+        marginBottom: 10,
 
-   }
+    },
+
+
+
 });
 
 
@@ -31,22 +34,22 @@ function App() {
 
 
     return (
-        <Provider store={store}>
+        <Provider store={store} >
+
             <AddDialogue />
-            <Box m={"15px"} height="90vh">
+            <Box m={"15px"} height="100%">
+
                 <Grid container spacing={3}>
-
-
 
                     <CardGen/>
 
-
                 </Grid>
-            </Box>
-            <AddCard />
 
+                <AddCard />
+
+            </Box>
         </Provider>
-    );
+    )
 }
 
 export default App;

@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { mouseInside, mouseOutside} from "./cardSlice";
 
 // asset import
-import rotundCat from '../../assets/rotundCat.jpg'
+//import rotundCat from '../../assets/rotundCat.jpg'
 
 // material-ui imports
 import makeStyles from "@material-ui/core/styles/makeStyles";
@@ -49,8 +49,9 @@ const useStyles = makeStyles({
 export function FeedCard(props){
 
     const dispatch = useDispatch()
-    const crntTitle = useSelector((state) => state.FeedCard.cards[props.id])
-    const desc = "This is a description!"
+    const crntTitle = useSelector((state) => state.FeedCard.cards[props.id].seriesTitle)
+    const imageURL = useSelector( (state) => state.FeedCard.cards[props.id].coverLoc)
+    const desc = useSelector( (state) => state.FeedCard.cards[props.id].seriesDesc)
     const classes = useStyles()
 
     const doBlur = useSelector((state) => state.FeedCard.cards[props.id].showInfo ? classes.blurImg : null)
@@ -61,8 +62,16 @@ export function FeedCard(props){
                 <CardActionArea>
 
                     <div onMouseEnter={() => dispatch(mouseInside(props.id))} onMouseLeave={() => dispatch(mouseOutside(props.id))}>
-                        {doBlur ? <Typography gutterBottom className={classes.font} variant="h5" component="h5">{crntTitle.seriesTitle}</Typography> : null}
-                        <CardMedia component="img" image={rotundCat} title="Large Cat" className={`${classes.media} ${doBlur ? classes.blurImg : null}`}/>
+                        {doBlur ? <Typography gutterBottom className={classes.font} variant="h5" component="h5">{crntTitle}</Typography> : null}
+                        {/*<CardMedia component="img" image={rotundCat} title="Large Cat" className={`${classes.media} ${doBlur ? classes.blurImg : null}`}/>*/}
+                        <CardMedia component="img" image={imageURL} title="Cover Image" className={`${classes.media} ${doBlur ? classes.blurImg : null}`}/>
+                        {/* TODO Add chapter list here */}
+                        {/* Keep in mind, you'll likely have to do an API call just to get the link of a chapter
+                            NEVERMIND: Chapter links are in the form:
+                            https://mangadex.org/chapter/CHAPTERID
+
+                            EZ PZ
+                            */}
                     </div>
 
                 </CardActionArea>

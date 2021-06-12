@@ -1,17 +1,15 @@
 import React from "react"
 // Redux import
 import { useSelector, useDispatch } from 'react-redux'
-import { updateField} from "./addDialogueSlice";
+import { updateField } from "./addDialogueSlice";
 import { closeAddDialogue } from "../addCard/addCardSlice";
-import { pushID } from "../card/cardSlice"
+import { pushID, fetchSeriesByID } from "../card/cardSlice"
 
 
 // material-ui imports
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Button from "@material-ui/core/Button";
-import {Paper, Typography, CardActionArea,
-              CardContent, TextField, IconButton} from "@material-ui/core";
-import {addCardSlice} from "../addCard/addCardSlice";
+import {Paper, Typography, TextField, IconButton} from "@material-ui/core";
 import CloseIcon from '@material-ui/icons/Close';
 
 const useStyles = makeStyles({
@@ -35,11 +33,14 @@ const useStyles = makeStyles({
 
 })
 
-export function AddDialogue(){
+export function AddDialogue(props){
 
     const dispatch = useDispatch()
     const showThis = useSelector((state) => state.AddCard.addingFeed)
-    let currentValue = useSelector((state) => state.dialogueField)
+    //const currentValue = useSelector((state) => state.dialogueField)
+    let currentValue = useSelector((state) => state.addDialogue.dialogueField)
+    console.log("currentValue in addDialogue")
+    console.log(currentValue)
     const classes = useStyles()
 
     // It seems like you need to dispatch reducers in an anonymous function in order
@@ -57,8 +58,8 @@ export function AddDialogue(){
                     </Typography>
 
                     <form autoComplete="off">
-                        <TextField onChange={() => {dispatch(updateField(currentValue))}} value={currentValue} valueid="inputID" variant="outlined" label="Series ID"/>
-                        <Button onClick={()=>{dispatch(pushID(currentValue))}}>Add it!</Button>
+                        <TextField onChange={(e) => dispatch(updateField(e.target.value))} valueid="inputID" variant="outlined" label="Series ID"/>
+                        <Button onClick={() => dispatch(fetchSeriesByID(currentValue))}>Add it!</Button>
                     </form>
 
 
