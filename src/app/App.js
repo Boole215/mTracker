@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import "../index.css";
 import { AddCard } from "./features/addCard/addCard";
 import { AddDialogue } from "./features/addDialogue/addDialogue";
@@ -10,8 +9,6 @@ import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import "@fontsource/roboto";
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import MangadexAPI from "./services/MangadexAPI";
-import { Card } from "@material-ui/core";
 
 const useStyles = makeStyles({
   addPos: {
@@ -19,8 +16,8 @@ const useStyles = makeStyles({
     bottom: 0,
     left: "100px",
     marginRight: 10,
-    marginBottom: 10
-  }
+    marginBottom: 10,
+  },
 });
 
 function App() {
@@ -32,7 +29,7 @@ function App() {
     <Provider store={store}>
       <AddDialogue />
       <Box m={"15px"} height="100%">
-        <Grid container spacing={3}>
+        <Grid container spacing={3} justify="center" alignItems="center">
           <CardGen />
         </Grid>
         <AddCard />
