@@ -6,10 +6,9 @@ import MangadexAPI from "../../services/MangadexAPI";
 // When I hover over card zero, how does it know that it's the zeroth card?
 // How will it know to blur itself and not say, card one?
 
-// TODO look into using normalizr to flatten out fetch data
-export const fetchMangaById = createAsyncThunk(
+export const fetchManga = createAsyncThunk(
   "feedcard/fetchByIDStatus",
-  async seriesId => {
+  async (seriesId) => {
     console.log("requesting series info");
 
     let mangaResponse = await MangadexAPI.fetchMangaById(seriesId);
@@ -29,9 +28,9 @@ export const fetchMangaById = createAsyncThunk(
     console.log(coverResponse);
     console.log(chapterResponse);
     //mangaResponse["data"]["chapterList"] = chapterResponse.results
-    mangaResponse["data"]["coverURL"] = `https://uploads.mangadex.org/covers/${
-      mangaResponse["data"]["id"]
-    }/${coverResponse["data"]["attributes"]["fileName"]}.512.jpg`;
+    mangaResponse["data"][
+      "coverURL"
+    ] = `https://uploads.mangadex.org/covers/${mangaResponse["data"]["id"]}/${coverResponse["data"]["attributes"]["fileName"]}.512.jpg`;
     mangaResponse["data"]["chapterList"] = chapterResponse.results;
     //65163395-201c-4f5a-b303-706f32bf2df4
     return mangaResponse;
@@ -58,7 +57,7 @@ export const feedCardSlice = createSlice({
         */
     cards: {},
     cardCount: 0,
-    loading: false
+    loading: false,
   },
   reducers: {
     // mouse actions receive the card's ID as the payload in order to determine
@@ -79,35 +78,35 @@ export const feedCardSlice = createSlice({
         seriesDesc: "Placeholder Description",
         coverLoc: "n/a",
         chapters: {},
-        showInfo: false
+        showInfo: false,
       };
       //   status: 'idle' | 'loading' | 'succeeded' | 'failed',
       //   error: string | null
       state.cardCount += 1;
-    }
+    },
   },
   extraReducers: {
-    [fetchMangaById.fulfilled]: (state, action) => {
+    [fetchManga.fulfilled]: (state, action) => {
       // Pull things from action.payload to config
       state.cards[action.payload["data"]["id"]] = {
         seriesTitle: action.payload["data"]["attributes"]["title"]["en"],
         coverLoc: action.payload["data"]["coverURL"],
         seriesDesc: action.payload["data"]["attributes"]["description"]["en"],
-        chapters: action.payload["data"]["chapterList"]
+        chapters: action.payload["data"]["chapterList"],
       };
 
       state.cardCount += 1;
     },
-    [fetchMangaById.rejected]: (state, action) => {
+    [fetchManga.rejected]: (state, action) => {
       console.log("series failed");
       // TODO Do something here
-    }
+    },
     /*
         [fetchChaptersByID.fulfilled]: (state, action) => {
 
 
         }*/
-  }
+  },
 });
 
 export const { mouseInside, mouseOutside, pushID } = feedCardSlice.actions;
