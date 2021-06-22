@@ -1,16 +1,31 @@
 import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers } from "redux";
 import feedCardReducer from "./features/card/cardSlice";
 import addCardReducer from "./features/addCard/addCardSlice";
 import addDialogueReducer from "./features/addDialogue/addDialogueSlice";
 
-// It seems like adding an initialState is a moot point
-export default configureStore({
-  reducer: {
-    FeedCard: feedCardReducer,
-    AddCard: addCardReducer,
-    addDialogue: addDialogueReducer,
-  },
+import { persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
+
+const reducers = combineReducers({
+  FeedCard: feedCardReducer,
+  AddCard: addCardReducer,
+  addDialogue: addDialogueReducer,
 });
+
+const persistConfig = {
+  key: "root",
+  storage,
+  whitelist: ["FeedCard"],
+};
+
+const persistedReducers = persistReducer(persistConfig, reducers);
+
+const store = configureStore({
+  reducer: persistedReducers,
+});
+
+export default store;
 
 /*
  * Because each component manages the state of itself

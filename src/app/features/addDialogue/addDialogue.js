@@ -3,7 +3,7 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { updateField } from "./addDialogueSlice";
 import { closeAddDialogue } from "../addCard/addCardSlice";
-import { fetchMangaById } from "../card/cardSlice";
+import { fetchManga } from "../card/cardSlice";
 
 // material-ui imports
 import makeStyles from "@material-ui/core/styles/makeStyles";
@@ -36,15 +36,13 @@ const useStyles = makeStyles({
 export function AddDialogue() {
   const dispatch = useDispatch();
   const showThis = useSelector((state) => state.AddCard.addingFeed);
-  //const currentValue = useSelector((state) => state.dialogueField)
   let currentValue = useSelector((state) => state.addDialogue.dialogueField);
-  console.log("currentValue in addDialogue");
-  console.log(currentValue);
   const classes = useStyles();
 
   // It seems like you need to dispatch reducers in an anonymous function in order
   // to prevent them from being dispatched upon component rendering
-  const handleFetchManga = () => dispatch(fetchMangaById(currentValue));
+  const handleFetchManga = () => dispatch(fetchManga(currentValue));
+  const handleUpdateField = (e) => dispatch(updateField(e.target.value));
 
   return showThis ? (
     <Paper elevation={4} className={classes.addDia}>
@@ -62,7 +60,7 @@ export function AddDialogue() {
 
       <form autoComplete="off">
         <TextField
-          onChange={(e) => dispatch(updateField(e.target.value))}
+          onChange={handleUpdateField}
           valueid="inputID"
           variant="outlined"
           label="Series ID"

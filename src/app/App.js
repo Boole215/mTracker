@@ -4,6 +4,9 @@ import { AddDialogue } from "./features/addDialogue/addDialogue";
 import { Provider } from "react-redux";
 import { CardGen } from "./features/cardGen/cardGen";
 import store from "./store";
+import { PersistGate } from "redux-persist/integration/react";
+import { persistStore } from "redux-persist";
+import React from "react";
 
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
@@ -22,18 +25,20 @@ const useStyles = makeStyles({
 
 function App() {
   const classes = useStyles();
-
+  let persistor = persistStore(store);
   // useSelector((state) => state.addingFeed)
 
   return (
     <Provider store={store}>
-      <AddDialogue />
-      <Box m={"15px"} height="100%">
-        <Grid container spacing={3} justify="center" alignItems="center">
-          <CardGen />
-        </Grid>
-        <AddCard />
-      </Box>
+      <PersistGate loading={null} persistor={persistor}>
+        <AddDialogue />
+        <Box m={"15px"} height="100%">
+          <Grid container spacing={3} justify="center" alignItems="center">
+            <CardGen />
+          </Grid>
+          <AddCard />
+        </Box>
+      </PersistGate>
     </Provider>
   );
 }

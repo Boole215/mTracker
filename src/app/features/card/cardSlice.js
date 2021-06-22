@@ -6,8 +6,7 @@ import MangadexAPI from "../../services/MangadexAPI";
 // When I hover over card zero, how does it know that it's the zeroth card?
 // How will it know to blur itself and not say, card one?
 
-// TODO look into using normalizr to flatten out fetch data
-export const fetchMangaById = createAsyncThunk(
+export const fetchManga = createAsyncThunk(
   "feedcard/fetchByIDStatus",
   async (seriesId) => {
     console.log("requesting series info");
@@ -87,7 +86,7 @@ export const feedCardSlice = createSlice({
     },
   },
   extraReducers: {
-    [fetchMangaById.fulfilled]: (state, action) => {
+    [fetchManga.fulfilled]: (state, action) => {
       // Pull things from action.payload to config
       state.cards[action.payload["data"]["id"]] = {
         seriesTitle: action.payload["data"]["attributes"]["title"]["en"],
@@ -98,7 +97,7 @@ export const feedCardSlice = createSlice({
 
       state.cardCount += 1;
     },
-    [fetchMangaById.rejected]: (state, action) => {
+    [fetchManga.rejected]: (state, action) => {
       console.log("series failed");
       // TODO Do something here
     },

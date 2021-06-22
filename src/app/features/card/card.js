@@ -72,6 +72,8 @@ export function FeedCard(props) {
     (state) => state.FeedCard.cards[props.id].coverLoc
   );
 
+  const handleMouseEnter = () => dispatch(mouseInside(props.id));
+  const handleMouseExit = () => dispatch(mouseOutside(props.id));
   /*const desc = useSelector(
     (state) => state.FeedCard.cards[props.id].seriesDesc
   );*/
@@ -90,10 +92,7 @@ export function FeedCard(props) {
     <Grid item xs={2}>
       <Card elevation={3} className={classes.root}>
         <CardActionArea>
-          <div
-            onMouseEnter={() => dispatch(mouseInside(props.id))}
-            onMouseLeave={() => dispatch(mouseOutside(props.id))}
-          >
+          <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseExit}>
             {doBlur ? (
               <div>
                 <Typography
@@ -136,13 +135,6 @@ export function FeedCard(props) {
               title="Cover Image"
               className={`${classes.media} ${doBlur ? classes.blurImg : null}`}
             />
-            {/* TODO Add chapter list here */}
-            {/* Keep in mind, you'll likely have to do an API call just to get the link of a chapter
-                            NEVERMIND: Chapter links are in the form:
-                            https://mangadex.org/chapter/CHAPTERID
-
-                            EZ PZ
-                            */}
           </div>
         </CardActionArea>
       </Card>
