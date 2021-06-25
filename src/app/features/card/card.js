@@ -22,27 +22,42 @@ const useStyles = makeStyles({
   // TODO: Figure out how to make then rectangular cards,
   //       that are taller than they are wide. While
   //       maintaining image scale (clipping is ok)
+
+  // TODO: Dynamically modify seriesTitle fontSize based on the length of the title, can probably use inline styling and a function for this
+  //       something like, styles={}
+
+  // For some reason setting a minWidth and a minHeight rather than width/heights made the cards become
+  // smaller as you added more. Like, first card is normal sized, second card is a bit smaller, third card is
+  // even smaller etc. Like a matryoshka doll.
   root: {
     position: "relative",
-    maxWidth: 345,
+    // maxWidth looks good at 345
+    //maxWidth: 345,
     width: "15vw",
     height: "40vh",
+    maxWidth: "20vw",
+    maxHeight: "53.33vh",
     objectFit: "fill",
+    MuiButtonBase: { disableRipple: true },
   },
   media: {
-    height: "40vh",
-    width: "15vw",
+    //height: "40vh",
+    //width: "15vw",
+    minWidth: "15vw",
+    minHeight: "40vh",
+    maxWidth: "20vw",
+    maxHeight: "53.33vh",
     objectFit: "fill",
   },
   blurImg: {
     filter: "blur(3px) brightness(50%)",
   },
-  font: {
-    paddingLeft: "15%",
-    top: "10%",
-    paddingRight: "15%",
+  seriesTitle: {
+    paddingLeft: "3.25vw",
+    paddingTop: "4vh",
+    paddingRight: "2.5vw",
     position: "absolute",
-    fontSize: "140%",
+    fontSize: "2vh",
     color: "white",
     fontFamily: "Roboto",
     zIndex: 1,
@@ -50,15 +65,14 @@ const useStyles = makeStyles({
   myList: {
     zIndex: 1,
     position: "absolute",
-    fontColor: "black",
     background: "none",
-    paddingTop: "40%",
-    paddingLeft: "10%",
+    paddingTop: "13vh",
+    paddingLeft: "3vw",
   },
   listHeader: {
     color: "White",
     fontFamily: "Roboto",
-    fontSize: "18px",
+    fontSize: "1.5vh",
   },
 });
 
@@ -91,13 +105,13 @@ export function FeedCard(props) {
   return (
     <Grid item xs={2}>
       <Card elevation={3} className={classes.root}>
-        <CardActionArea>
+        <CardActionArea disableRipple>
           <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseExit}>
             {doBlur ? (
               <div>
                 <Typography
                   gutterBottom
-                  className={classes.font}
+                  className={classes.seriesTitle}
                   variant="h5"
                   component="h5"
                 >
@@ -123,6 +137,7 @@ export function FeedCard(props) {
                       <ChapterEntry
                         chapterTitle={chapters[key].data.attributes.title}
                         chapterNum={chapters[key].data.attributes.chapter}
+                        chapterID={chapters[key].data.id}
                       />
                     ))}
                 </List>
