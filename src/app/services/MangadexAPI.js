@@ -33,6 +33,12 @@ class MangadexAPI {
 
     return data;
   }
+
+  /**
+   * fetches a manga's chapters using the manga's Id
+   * @param seriesId
+   * @returns {Promise<any>}
+   */
   async fetchChapter(seriesId) {
     const response = await this.api.get(
       `manga/${seriesId}/feed?translatedLanguage[]=en&order[chapter]=desc`
@@ -41,36 +47,17 @@ class MangadexAPI {
     return response.data;
   }
 
+  /**
+   * fetches a cover by Id
+   * @param coverId
+   * @returns {Promise<any>}
+   */
   async fetchCover(coverId) {
     const response = await this.api.get(`cover/${coverId}`);
 
     const { data } = response;
 
     return data;
-  }
-
-  async fetchAuthor(authorID) {
-    const requestURL = `http://localhost:3001?query=author&ID=${authorID}`;
-
-    console.log(authorID);
-    console.log(requestURL);
-
-    return fetch(requestURL, { method: "GET" }).then((response) =>
-      response.json()
-    );
-    //console.log(response)
-  }
-
-  // put in package.json scripts maybe
-  // "proxy": "lcp -- proxyURL https://api.mangadex.org",
-  /* async fetchManga(seriesID){
-        const requestURL = `http://api.mangadex.org/manga/${seriesID}`
-
-        const response = fetch(requestURL, {headers:{"Access-Control-Allow-Origin":"*"}}).then( response => response.json())
-    }*/
-
-  fetchChapters(seriesID) {
-    return undefined;
   }
 }
 
