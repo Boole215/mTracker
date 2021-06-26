@@ -10,13 +10,16 @@ import { ChapterEntry } from "../chapterEntry/chapterEntry";
 
 // material-ui imports
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import Grid from "@material-ui/core/Grid";
-import Card from "@material-ui/core/Card";
-import CardMedia from "@material-ui/core/CardMedia";
-import CardActionArea from "@material-ui/core/CardActionArea";
-import Typography from "@material-ui/core/Typography";
-import List from "@material-ui/core/List";
-import ListSubheader from "@material-ui/core/ListSubheader";
+import {
+  Fade,
+  Grid,
+  CardMedia,
+  CardActionArea,
+  Typography,
+  List,
+  ListSubheader,
+  Card,
+} from "@material-ui/core";
 
 const useStyles = makeStyles({
   // TODO: Figure out how to make then rectangular cards,
@@ -91,7 +94,7 @@ export function FeedCard(props) {
   /*const desc = useSelector(
     (state) => state.FeedCard.cards[props.id].seriesDesc
   );*/
-
+  var iterCount = 0;
   const classes = useStyles();
 
   const doBlur = useSelector((state) =>
@@ -104,55 +107,61 @@ export function FeedCard(props) {
 
   return (
     <Grid item xs={2}>
-      <Card elevation={3} className={classes.root}>
-        <CardActionArea disableRipple>
-          <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseExit}>
-            {doBlur ? (
-              <div>
-                <Typography
-                  gutterBottom
-                  className={classes.seriesTitle}
-                  variant="h5"
-                  component="h5"
-                >
-                  {crntTitle}
-                </Typography>
-                <List
-                  className={classes.myList}
-                  dense={true}
-                  disablePadding
-                  subheader={
-                    <ListSubheader
-                      component="div"
-                      id="nested-list-subheader"
-                      className={classes.listHeader}
-                    >
-                      Chapters
-                    </ListSubheader>
-                  }
-                >
-                  {Object.keys(chapters)
-                    .slice(0, 5)
-                    .map((key) => (
-                      <ChapterEntry
-                        chapterTitle={chapters[key].data.attributes.title}
-                        chapterNum={chapters[key].data.attributes.chapter}
-                        chapterID={chapters[key].data.id}
-                      />
-                    ))}
-                </List>
-              </div>
-            ) : null}
-            {/*<CardMedia component="img" image={rotundCat} title="Large Cat" className={`${classes.media} ${doBlur ? classes.blurImg : null}`}/>*/}
-            <CardMedia
-              component="img"
-              image={imageURL}
-              title="Cover Image"
-              className={`${classes.media} ${doBlur ? classes.blurImg : null}`}
-            />
-          </div>
-        </CardActionArea>
-      </Card>
+      <Fade in={true} timeout={{ enter: 600 }}>
+        <Card elevation={3} className={classes.root}>
+          <CardActionArea disableRipple>
+            <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseExit}>
+              {doBlur ? (
+                <div>
+                  <Typography
+                    gutterBottom
+                    className={classes.seriesTitle}
+                    variant="h5"
+                    component="h5"
+                  >
+                    {crntTitle}
+                  </Typography>
+                  <List
+                    className={classes.myList}
+                    dense={true}
+                    disablePadding
+                    subheader={
+                      <ListSubheader
+                        component="div"
+                        id="nested-list-subheader"
+                        className={classes.listHeader}
+                      >
+                        Chapters
+                      </ListSubheader>
+                    }
+                  >
+                    {Object.keys(chapters)
+                      .slice(0, 5)
+                      .map((key) => (
+                        <ChapterEntry
+                          chapterTitle={chapters[key].data.attributes.title}
+                          chapterNum={chapters[key].data.attributes.chapter}
+                          chapterID={chapters[key].data.id}
+                          seriesID={props.id}
+                          iter={iterCount++}
+                        />
+                      ))}
+                  </List>
+                </div>
+              ) : null}
+              {/*<CardMedia component="img" image={rotundCat} title="Large Cat" className={`${classes.media} ${doBlur ? classes.blurImg : null}`}/>*/}
+              <CardMedia
+                component="img"
+                image={imageURL}
+                title="Cover Image"
+                className={`${classes.media} ${
+                  doBlur ? classes.blurImg : null
+                }`}
+              />
+            </div>
+          </CardActionArea>
+        </Card>
+      </Fade>
     </Grid>
   );
 }
