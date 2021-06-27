@@ -1,0 +1,19 @@
+/***
+ * returns an ideal font size based titleLength
+ * @param {number} titleLength
+ * @returns {number}
+ */
+function getIdealFontSize(titleLength) {
+  /* This uses Frieren's title as the basis for a min VH,
+   * and uses Kaguya's title as the basis for a max VH.
+   * The equation is essentially: 2 - ((InputLen) - (minLen)) * C
+   * where C is a constant
+   * The constant was found by plugging in Kaguya's len (58) as InputLen, and Frieren's len (17)
+   * as minLen
+   */
+  const calculatedValue = 2 - (titleLength - 17) * 0.00976;
+
+  return Math.min(Math.max(calculatedValue, 1.6), 2);
+}
+
+export { getIdealFontSize };

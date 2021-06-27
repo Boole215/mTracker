@@ -88,14 +88,23 @@ export function FeedCard(props) {
   const imageURL = useSelector(
     (state) => state.FeedCard.cards[props.id].coverLoc
   );
+  const titleSize = useSelector(
+    (state) => state.FeedCard.cards[props.id].titleSize
+  );
 
   const handleMouseEnter = () => dispatch(mouseInside(props.id));
   const handleMouseExit = () => dispatch(mouseOutside(props.id));
   /*const desc = useSelector(
     (state) => state.FeedCard.cards[props.id].seriesDesc
   );*/
-  var iterCount = 0;
+  let iterCount = 0;
   const classes = useStyles();
+  const innerFont = makeStyles({
+    dynamicTitle: {
+      fontSize: `${titleSize}vh!important`,
+    },
+  });
+  const innerClasses = innerFont();
 
   const doBlur = useSelector((state) =>
     state.FeedCard.cards[props.id].showInfo ? classes.blurImg : null
@@ -112,10 +121,11 @@ export function FeedCard(props) {
           <CardActionArea disableRipple>
             <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseExit}>
               {doBlur ? (
+                // TODO: The Manga title and chapter list might look better if a Grid/GridItems are used rather than divs, look into this
                 <div>
                   <Typography
                     gutterBottom
-                    className={classes.seriesTitle}
+                    className={`${classes.seriesTitle} ${innerClasses.dynamicTitle}`}
                     variant="h5"
                     component="h5"
                   >
@@ -129,7 +139,7 @@ export function FeedCard(props) {
                       <ListSubheader
                         component="div"
                         id="nested-list-subheader"
-                        className={classes.listHeader}
+                        className={`${classes.listHeader} `}
                       >
                         Chapters
                       </ListSubheader>

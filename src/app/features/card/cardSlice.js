@@ -1,10 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import MangadexAPI from "../../services/MangadexAPI";
-// For a component that's going to be recycled very often like this one,
-// is it even worth giving it an initialState?
-
-// When I hover over card zero, how does it know that it's the zeroth card?
-// How will it know to blur itself and not say, card one?
+import { getIdealFontSize } from "../../services/UtilityFunctions";
 
 // TODO: Add conditionals for if the series has already added
 //       as in, only make the chapter and cover calls.
@@ -12,7 +8,6 @@ export const fetchManga = createAsyncThunk(
   "feedcard/fetchByIDStatus",
   async (seriesId) => {
     let mangaResponse = await MangadexAPI.fetchMangaById(seriesId);
-
     const chapterResponse = await MangadexAPI.fetchChapter(seriesId);
 
     const coverResponse = await MangadexAPI.fetchCover(
@@ -25,7 +20,10 @@ export const fetchManga = createAsyncThunk(
     mangaResponse["data"]["chapterList"] = chapterResponse.results;
     mangaResponse["data"]["chapterList"] = mangaResponse["data"][
       "chapterList"
-    ].map((x) => ({ ...x, highlight: false }));
+    ].map((x) => ({
+      ...x,
+      highlight: false,
+    }));
     //65163395-201c-4f5a-b303-706f32bf2df4
     return mangaResponse;
   }
@@ -75,6 +73,9 @@ export const feedCardSlice = createSlice({
         coverLoc: action.payload["data"]["coverURL"],
         seriesDesc: action.payload["data"]["attributes"]["description"]["en"],
         chapters: action.payload["data"]["chapterList"],
+        titleSize: getIdealFontSize(
+          action.payload["data"]["attributes"]["title"]["en"].length
+        ),
       };
 
       state.cardCount += 1;
