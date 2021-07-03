@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack://src/index.css"],"names":[],"mappings":"AAAA,EAEI,uBAAwB,CACxB,oBACJ,CACA,oBACI,YACJ","file":"main.fdba1319.chunk.css","sourcesContent":["*{\r\n\r\n    -ms-overflow-style: none;\r\n    scrollbar-width:none;\r\n}\r\n::-webkit-scrollbar{\r\n    display:none;\r\n}"]}
