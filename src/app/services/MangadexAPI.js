@@ -1,4 +1,5 @@
 import axios from "axios";
+import rateLimit from "axios-rate-limit";
 // todo: move this to a config/appConfig.js
 const APP_CONFIG = {
   apiUrl: "https://api.mangadex.org/",
@@ -6,8 +7,11 @@ const APP_CONFIG = {
 
 class MangadexAPI {
   constructor() {
-    this.api = axios.create({
+    this.axiosInst = axios.create({
       baseURL: APP_CONFIG.apiUrl,
+    });
+    this.api = rateLimit(this.axiosInst, {
+      maxRPS: 5,
     });
   }
 

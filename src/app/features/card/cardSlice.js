@@ -1,11 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import MangadexAPI from "../../services/MangadexAPI";
 import { getIdealFontSize } from "../../services/UtilityFunctions";
+import myIcon from "../../../assets/favicon.ico";
 
 // TODO: Add conditionals for if the series has already added
 //       as in, only make the chapter and cover calls.
 export const fetchManga = createAsyncThunk(
-  "feedcard/fetchByIDStatus",
+  "feedcard/fetchManga",
   async (seriesId) => {
     let mangaResponse = await MangadexAPI.fetchMangaById(seriesId);
     const chapterResponse = await MangadexAPI.fetchChapter(seriesId);
@@ -24,8 +25,51 @@ export const fetchManga = createAsyncThunk(
       ...x,
       highlight: false,
     }));
+
+    // The following lines will be used for testing the update function
+    // They will remove the most recent entry, then move everything else up by one
+    //const chapOne = mangaResponse["data"]["chapterList"]["1"];
+    //mangaResponse["data"]["chapterList"]["0"] = chapOne;
     //65163395-201c-4f5a-b303-706f32bf2df4
     return mangaResponse;
+  }
+);
+
+export const updateChapterList = createAsyncThunk(
+  "feedcard/updateChapterList",
+  async (seriesId, { getState }) => {
+    const state = getState();
+    const currentSeriesLatestChapter =
+      state.FeedCard.cards[seriesId].mostRecentChapter;
+
+    const currentSeriesTitle = state.FeedCard.cards[seriesId].seriesTitle;
+
+    const updatedChapterList = await MangadexAPI.fetchChapter(seriesId);
+    const retChapList = updatedChapterList.results.map((x) => ({
+      ...x,
+      highlight: false,
+    }));
+    // If the length of the list of chapters is non zero, then get the latest chapter's number
+    const latestChapter =
+      updatedChapterList.results.length !== 0
+        ? updatedChapterList.results["0"].data.attributes.chapter
+        : null;
+    if (latestChapter != null) {
+      if (latestChapter !== currentSeriesLatestChapter) {
+        const latestTitle = retChapList["0"].data.attributes.title;
+        console.log("Sending notification");
+        const title = `New Chapter for ${currentSeriesTitle}!`;
+        const body = `Chapter ${latestChapter}, ${latestTitle}`;
+
+        const myNotif = new Notification(title, { body, myIcon });
+        console.log("Notification sent");
+      }
+    }
+    return {
+      seriesId: seriesId,
+      chapterList: retChapList,
+      latest: latestChapter,
+    };
   }
 );
 
@@ -73,6 +117,10 @@ export const feedCardSlice = createSlice({
         coverLoc: action.payload["data"]["coverURL"],
         seriesDesc: action.payload["data"]["attributes"]["description"]["en"],
         chapters: action.payload["data"]["chapterList"],
+        mostRecentChapter:
+          action.payload["data"]["chapterList"].length !== 0
+            ? action.payload.data.chapterList["0"].data.attributes.chapter
+            : null,
         titleSize: getIdealFontSize(
           action.payload["data"]["attributes"]["title"]["en"].length
         ),
@@ -83,6 +131,12 @@ export const feedCardSlice = createSlice({
     [fetchManga.rejected]: (state, action) => {
       console.log("series failed");
       // TODO Do something here
+    },
+    [updateChapterList.fulfilled]: (state, action) => {
+      state.cards[action.payload.seriesId].chapters =
+        action.payload.chapterList;
+      state.cards[action.payload.seriesId].mostRecentChapter =
+        action.payload.latest;
     },
   },
 });

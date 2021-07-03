@@ -6,9 +6,15 @@ import { closeAddDialogue } from "../addCard/addCardSlice";
 import { fetchManga } from "../card/cardSlice";
 
 // material-ui imports
-import makeStyles from "@material-ui/core/styles/makeStyles";
-import Button from "@material-ui/core/Button";
-import { Paper, Typography, TextField, IconButton } from "@material-ui/core";
+import {
+  Paper,
+  Typography,
+  TextField,
+  IconButton,
+  Button,
+  makeStyles,
+  Fade,
+} from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 
 const useStyles = makeStyles({
@@ -44,35 +50,39 @@ export function AddDialogue() {
   const handleFetchManga = () => dispatch(fetchManga(currentValue));
   const handleUpdateField = (e) => dispatch(updateField(e.target.value));
 
-  return showThis ? (
-    <Paper elevation={4} className={classes.addDia}>
-      <IconButton
-        size="medium"
-        onClick={() => {
-          dispatch(closeAddDialogue());
-        }}
-        className={classes.exit}
-      >
-        <CloseIcon fontSize="medium" />
-      </IconButton>
-
-      <Typography className={classes.font}>What is the series' ID?</Typography>
-
-      <form autoComplete="off">
-        <TextField
-          onChange={handleUpdateField}
-          valueid="inputID"
-          variant="outlined"
-          label="Series ID"
-        />
-        <Button
-          variant="contained"
-          onClick={handleFetchManga}
-          className={classes.addButton}
+  return (
+    <Fade in={showThis}>
+      <Paper elevation={12} className={classes.addDia}>
+        <IconButton
+          size="medium"
+          onClick={() => {
+            dispatch(closeAddDialogue());
+          }}
+          className={classes.exit}
         >
-          Add it!
-        </Button>
-      </form>
-    </Paper>
-  ) : null;
+          <CloseIcon fontSize="medium" />
+        </IconButton>
+
+        <Typography className={classes.font}>
+          What is the series' ID?
+        </Typography>
+
+        <form autoComplete="off">
+          <TextField
+            onChange={handleUpdateField}
+            valueid="inputID"
+            variant="outlined"
+            label="Series ID"
+          />
+          <Button
+            variant="contained"
+            onClick={handleFetchManga}
+            className={classes.addButton}
+          >
+            Add it!
+          </Button>
+        </form>
+      </Paper>
+    </Fade>
+  );
 }

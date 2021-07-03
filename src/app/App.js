@@ -1,14 +1,21 @@
 import "../index.css";
-import { AddCard } from "./features/addCard/addCard";
-import { AddDialogue } from "./features/addDialogue/addDialogue";
+
+// Core dependencies
+import React from "react";
 import { Provider } from "react-redux";
-import { CardGen } from "./features/cardGen/cardGen";
-import { LoadingScreen } from "./features/loadingScreen/loadingScreen";
-import store from "./store";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from "redux-persist";
-import React from "react";
+import store from "./store";
 
+// Custom Components
+import { AddCard } from "./features/addCard/addCard";
+import { AddDialogue } from "./features/addDialogue/addDialogue";
+import { CardGen } from "./features/cardGen/cardGen";
+import { LoadingScreen } from "./features/loadingScreen/loadingScreen";
+import { UpdateChaptersButton } from "./features/updateChaptersButton/updateChaptersButton.js";
+//import Notification from "react-web-notification/src/components/Notification";
+
+// Material UI
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import "@fontsource/roboto";
@@ -25,6 +32,7 @@ function App() {
             <CardGen />
           </Grid>
           <AddCard />
+          <UpdateChaptersButton />
         </Box>
       </PersistGate>
     </Provider>

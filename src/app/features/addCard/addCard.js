@@ -18,14 +18,15 @@ const useStyles = makeStyles({
 export function AddCard() {
   const dispatch = useDispatch();
   const classes = useStyles();
+  const handleOpenAddDialogue = () => {
+    dispatch(openAddDialogue());
+  };
 
   return (
     <IconButton
       size="medium"
       color="black"
-      onClick={() => {
-        dispatch(openAddDialogue());
-      }}
+      onClick={handleOpenAddDialogue}
       className={classes.addPos}
     >
       <AddCircleRoundedIcon fontSize="large" />

@@ -29,13 +29,28 @@ const useStyles = makeStyles({
 });
 // Link for each chapter looks like: https://mangadex.org/chapter/CHAPTERID/1
 // Where the number on the end is the page number
-export function ChapterEntry(props) {
+
+/* Props passed to component are:
+ * chapterTitle={chapters[key].data.attributes.title}
+ * chapterNum={chapters[key].data.attributes.chapter}
+ * chapterID={chapters[key].data.id}
+ * seriesID={id}
+ * iter={iterCount++}
+ */
+export function ChapterEntry({
+  chapterTitle,
+  chapterNum,
+  chapterID,
+  seriesID,
+  iter,
+}) {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const chapterKeys = { seriesID: props.seriesID, chapterID: props.iter };
+  // TODO: Rename chapterID used in chapter keys to localChapterID, as that's the ID that's used
+  //       within the object, not the actual identifying ID for the chapter in the API
+  const chapterKeys = { seriesID: seriesID, chapterID: iter };
   const isHighlighted = useSelector(
-    (state) =>
-      state.FeedCard.cards[props.seriesID].chapters[props.iter].highlight
+    (state) => state.FeedCard.cards[seriesID].chapters[iter].highlight
   );
   const handleHoveringChapter = () => {
     dispatch(mouseOverChapter(chapterKeys));
@@ -47,7 +62,7 @@ export function ChapterEntry(props) {
   return (
     <Link
       underline={"None"}
-      href={`https://mangadex.org/chapter/${props.chapterID}/1`}
+      href={`https://mangadex.org/chapter/${chapterID}/1`}
       TypographyClasses={classes.myTypography}
       onMouseEnter={handleHoveringChapter}
       onMouseLeave={handleStoppedHoveringChapter}
@@ -65,8 +80,8 @@ export function ChapterEntry(props) {
               isHighlighted ? classes.highlight : ""
             }`,
           }}
-          primary={`Chapter ${props.chapterNum}`}
-          secondary={props.chapterTitle}
+          primary={`Chapter ${chapterNum}`}
+          secondary={chapterTitle}
         />
       </ListItem>
     </Link>

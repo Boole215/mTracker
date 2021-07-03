@@ -80,20 +80,16 @@ const useStyles = makeStyles({
 });
 
 // add props to be access stuff
-export function FeedCard(props) {
+export function FeedCard({ id }) {
   const dispatch = useDispatch();
   const crntTitle = useSelector(
-    (state) => state.FeedCard.cards[props.id].seriesTitle
+    (state) => state.FeedCard.cards[id].seriesTitle
   );
-  const imageURL = useSelector(
-    (state) => state.FeedCard.cards[props.id].coverLoc
-  );
-  const titleSize = useSelector(
-    (state) => state.FeedCard.cards[props.id].titleSize
-  );
+  const imageURL = useSelector((state) => state.FeedCard.cards[id].coverLoc);
+  const titleSize = useSelector((state) => state.FeedCard.cards[id].titleSize);
 
-  const handleMouseEnter = () => dispatch(mouseInside(props.id));
-  const handleMouseExit = () => dispatch(mouseOutside(props.id));
+  const handleMouseEnter = () => dispatch(mouseInside(id));
+  const handleMouseExit = () => dispatch(mouseOutside(id));
   /*const desc = useSelector(
     (state) => state.FeedCard.cards[props.id].seriesDesc
   );*/
@@ -107,17 +103,15 @@ export function FeedCard(props) {
   const innerClasses = innerFont();
 
   const doBlur = useSelector((state) =>
-    state.FeedCard.cards[props.id].showInfo ? classes.blurImg : null
+    state.FeedCard.cards[id].showInfo ? classes.blurImg : null
   );
 
-  const chapters = useSelector(
-    (state) => state.FeedCard.cards[props.id].chapters
-  );
+  const chapters = useSelector((state) => state.FeedCard.cards[id].chapters);
 
   return (
     <Grid item xs={2}>
       <Fade in={true} timeout={{ enter: 600 }}>
-        <Card elevation={3} className={classes.root}>
+        <Card elevation={6} className={classes.root}>
           <CardActionArea disableRipple>
             <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseExit}>
               {doBlur ? (
@@ -152,7 +146,7 @@ export function FeedCard(props) {
                           chapterTitle={chapters[key].data.attributes.title}
                           chapterNum={chapters[key].data.attributes.chapter}
                           chapterID={chapters[key].data.id}
-                          seriesID={props.id}
+                          seriesID={id}
                           iter={iterCount++}
                         />
                       ))}
