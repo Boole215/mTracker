@@ -1,6 +1,6 @@
 const myConfig = {
   apiUrl: "https://api.mangadex.org/",
-  proxyUrl: "http://jshoukai.com/api",
+  proxyUrl: "https://jshoukai.com/api",
   projectRoot: __dirname,
 };
 
