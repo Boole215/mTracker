@@ -1,14 +1,11 @@
 import axios from "axios";
 import rateLimit from "axios-rate-limit";
+import appConfig from "../../appConfig";
 // todo: move this to a config/appConfig.js
-const APP_CONFIG = {
-  apiUrl: "https://api.mangadex.org/",
-};
-
 class MangadexAPI {
   constructor() {
     this.axiosInst = axios.create({
-      baseURL: APP_CONFIG.apiUrl,
+      baseURL: appConfig.proxyUrl,
     });
     this.api = rateLimit(this.axiosInst, {
       maxRPS: 5,
@@ -20,9 +17,11 @@ class MangadexAPI {
    * @returns {Promise<[]>}
    */
   async fetchAllManga() {
-    const response = await this.api.get("manga/");
-    const { data } = response;
+    const response = await this.api.get("/manga/");
 
+    //const myUrl = `${APP_CONFIG.apiUrl}/manga/`;
+    //const response = await this.api.get(`?url=${encodeURIComponent(myUrl)}`);
+    const { data } = response;
     return data;
   }
 
@@ -32,9 +31,10 @@ class MangadexAPI {
    * @returns {Promise<Object>}
    */
   async fetchMangaById(seriesId) {
-    const response = await this.api.get(`manga/${seriesId}`);
+    const response = await this.api.get(`/manga/${seriesId}`);
+    //const myUrl = `${APP_CONFIG.apiUrl}/manga/${seriesId}`;
+    //const response = await this.api.get(`?url=${encodeURIComponent(myUrl)}`);
     const { data } = response;
-
     return data;
   }
 
@@ -45,9 +45,10 @@ class MangadexAPI {
    */
   async fetchChapter(seriesId) {
     const response = await this.api.get(
-      `manga/${seriesId}/feed?translatedLanguage[]=en&order[chapter]=desc`
+      `/manga/${seriesId}/feed?translatedLanguage[]=en&order[chapter]=desc`
     );
-
+    //const myUrl = `${APP_CONFIG.apiURl}/manga/${seriesId}/feed?translatedLanguage[]=en&order[chapter]=desc`;
+    //const response = await this.api.get(`?url=${encodeURIComponent(myUrl)}`);
     return response.data;
   }
 
@@ -57,8 +58,9 @@ class MangadexAPI {
    * @returns {Promise<any>}
    */
   async fetchCover(coverId) {
-    const response = await this.api.get(`cover/${coverId}`);
-
+    //const myUrl = `${APP_CONFIG.apiURl}/cover/${coverId}/`;
+    //const response = await this.api.get(`?url=${encodeURIComponent(myUrl)}`);
+    const response = await this.api.get(`/cover/${coverId}`);
     const { data } = response;
 
     return data;
