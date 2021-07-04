@@ -1,27 +1,27 @@
 {
   "files": {
     "main.css": "/mTracker/static/css/main.fdba1319.chunk.css",
-    "main.js": "/mTracker/static/js/main.8c00f48b.chunk.js",
-    "main.js.map": "/mTracker/static/js/main.8c00f48b.chunk.js.map",
+    "main.js": "/mTracker/static/js/main.1ee8624d.chunk.js",
+    "main.js.map": "/mTracker/static/js/main.1ee8624d.chunk.js.map",
     "runtime-main.js": "/mTracker/static/js/runtime-main.dda10986.js",
     "runtime-main.js.map": "/mTracker/static/js/runtime-main.dda10986.js.map",
     "static/css/2.314c6fc1.chunk.css": "/mTracker/static/css/2.314c6fc1.chunk.css",
-    "static/js/2.37d4fa0f.chunk.js": "/mTracker/static/js/2.37d4fa0f.chunk.js",
-    "static/js/2.37d4fa0f.chunk.js.map": "/mTracker/static/js/2.37d4fa0f.chunk.js.map",
+    "static/js/2.9ef9a519.chunk.js": "/mTracker/static/js/2.9ef9a519.chunk.js",
+    "static/js/2.9ef9a519.chunk.js.map": "/mTracker/static/js/2.9ef9a519.chunk.js.map",
     "index.html": "/mTracker/index.html",
     "service-worker.js": "/mTracker/service-worker.js",
     "service-worker.js.map": "/mTracker/service-worker.js.map",
     "static/css/2.314c6fc1.chunk.css.map": "/mTracker/static/css/2.314c6fc1.chunk.css.map",
     "static/css/main.fdba1319.chunk.css.map": "/mTracker/static/css/main.fdba1319.chunk.css.map",
-    "static/js/2.37d4fa0f.chunk.js.LICENSE.txt": "/mTracker/static/js/2.37d4fa0f.chunk.js.LICENSE.txt",
+    "static/js/2.9ef9a519.chunk.js.LICENSE.txt": "/mTracker/static/js/2.9ef9a519.chunk.js.LICENSE.txt",
     "static/media/favicon.4fe75d5f.ico": "/mTracker/static/media/favicon.4fe75d5f.ico",
     "static/media/index.css": "/mTracker/static/media/roboto-vietnamese-400-normal.c0bec65d.woff2"
   },
   "entrypoints": [
     "static/js/runtime-main.dda10986.js",
     "static/css/2.314c6fc1.chunk.css",
-    "static/js/2.37d4fa0f.chunk.js",
+    "static/js/2.9ef9a519.chunk.js",
     "static/css/main.fdba1319.chunk.css",
-    "static/js/main.8c00f48b.chunk.js"
+    "static/js/main.1ee8624d.chunk.js"
   ]
 }
