@@ -11,6 +11,7 @@ const useStyles = makeStyles({
     left: "95vw",
     marginRight: 10,
     marginTop: 10,
+    zIndex: 10,
   },
 });
 

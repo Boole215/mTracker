@@ -12,8 +12,8 @@ const useStyle = makeStyles({
     fontSize: "1.0vh",
   },
   myTooltip: {
-    paddingBottom: ".5vh",
-    marginLeft: "-.5vw",
+    bottom: ".215vh",
+    left: "-.5vw",
   },
 });
 
@@ -21,6 +21,7 @@ export function AddCardTooltip() {
   const classes = useStyle();
   return (
     <Tooltip
+      className={classes.myTooltip}
       title={
         <React.Fragment>
           <Typography className={classes.myTypography}>
@@ -37,9 +38,10 @@ export function AddCardTooltip() {
           </Typography>
         </React.Fragment>
       }
+      placement="top"
     >
       <IconButton aria-label="help-tooltip">
-        <HelpIcon fontSize={"small"} className={classes.myTooltip} />
+        <HelpIcon fontSize={"small"} />
       </IconButton>
     </Tooltip>
   );

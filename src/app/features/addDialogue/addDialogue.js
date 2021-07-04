@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { updateField } from "./addDialogueSlice";
 import { closeAddDialogue } from "../addCard/addCardSlice";
 import { fetchManga } from "../card/cardSlice";
+import { AddCardTooltip } from "../addCardTooltip/addCardTooltip";
 
 // material-ui imports
 import {
@@ -49,22 +50,21 @@ export function AddDialogue() {
   // to prevent them from being dispatched upon component rendering
   const handleFetchManga = () => dispatch(fetchManga(currentValue));
   const handleUpdateField = (e) => dispatch(updateField(e.target.value));
+  const handleCloseAddDialogue = () => dispatch(closeAddDialogue());
 
   return (
     <Fade in={showThis}>
       <Paper elevation={12} className={classes.addDia}>
         <IconButton
           size="medium"
-          onClick={() => {
-            dispatch(closeAddDialogue());
-          }}
+          onClick={handleCloseAddDialogue}
           className={classes.exit}
         >
           <CloseIcon fontSize="medium" />
         </IconButton>
 
         <Typography className={classes.font}>
-          What is the series' ID?
+          What is the series' ID? <AddCardTooltip />
         </Typography>
 
         <form autoComplete="off">

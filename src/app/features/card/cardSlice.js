@@ -61,6 +61,7 @@ export const updateChapterList = createAsyncThunk(
         const title = `New Chapter for ${currentSeriesTitle}!`;
         const body = `Chapter ${latestChapter}, ${latestTitle}`;
 
+        // eslint-disable-next-line no-unused-vars
         const myNotif = new Notification(title, { body, myIcon });
         console.log("Notification sent");
       }
