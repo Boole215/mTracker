@@ -5,15 +5,11 @@ import HelpIcon from "@material-ui/icons/Help";
 const useStyle = makeStyles({
   myTypography: {
     fontFamily: "Roboto",
-    fontSize: "1.3vh",
+    fontSize: "1.5vh",
   },
   mySubTypography: {
     fontFamily: "Roboto",
-    fontSize: "1.0vh",
-  },
-  myTooltip: {
-    bottom: ".215vh",
-    left: "-.5vw",
+    fontSize: "1.2vh",
   },
 });
 
@@ -21,7 +17,6 @@ export function AddCardTooltip() {
   const classes = useStyle();
   return (
     <Tooltip
-      className={classes.myTooltip}
       title={
         <React.Fragment>
           <Typography className={classes.myTypography}>
@@ -39,6 +34,8 @@ export function AddCardTooltip() {
         </React.Fragment>
       }
       placement="top"
+      enterTouchDelay={0}
+      arrow
     >
       <IconButton aria-label="help-tooltip">
         <HelpIcon fontSize={"small"} />

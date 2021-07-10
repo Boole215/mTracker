@@ -1,7 +1,7 @@
 import React from "react";
 // Redux import
 import { useSelector, useDispatch } from "react-redux";
-import { mouseInside, mouseOutside } from "./cardSlice";
+import { mouseInside, mouseOutside, touchToggleBlur } from "./cardSlice";
 
 // component import
 import { ChapterEntry } from "../chapterEntry/chapterEntry";
@@ -26,9 +26,6 @@ const useStyles = makeStyles({
   //       that are taller than they are wide. While
   //       maintaining image scale (clipping is ok)
 
-  // TODO: Dynamically modify seriesTitle fontSize based on the length of the title, can probably use inline styling and a function for this
-  //       something like, styles={}
-
   // For some reason setting a minWidth and a minHeight rather than width/heights made the cards become
   // smaller as you added more. Like, first card is normal sized, second card is a bit smaller, third card is
   // even smaller etc. Like a matryoshka doll.
@@ -36,9 +33,9 @@ const useStyles = makeStyles({
     position: "relative",
     // maxWidth looks good at 345
     //maxWidth: 345,
-    width: "15vw",
+    minWidth: "10vw",
     height: "40vh",
-    maxWidth: "20vw",
+    maxWidth: "50vw",
     maxHeight: "53.33vh",
     objectFit: "fill",
     MuiButtonBase: { disableRipple: true },
@@ -48,9 +45,9 @@ const useStyles = makeStyles({
     //width: "15vw",
     minWidth: "15vw",
     minHeight: "40vh",
-    maxWidth: "20vw",
+    maxWidth: "50vw",
     maxHeight: "53.33vh",
-    objectFit: "fill",
+    objectFit: "cover",
   },
   blurImg: {
     filter: "blur(3px) brightness(50%)",
@@ -90,6 +87,7 @@ export function FeedCard({ id }) {
 
   const handleMouseEnter = () => dispatch(mouseInside(id));
   const handleMouseExit = () => dispatch(mouseOutside(id));
+  const handleTouchToggle = () => dispatch(touchToggleBlur(id));
   /*const desc = useSelector(
     (state) => state.FeedCard.cards[props.id].seriesDesc
   );*/
@@ -109,11 +107,15 @@ export function FeedCard({ id }) {
   const chapters = useSelector((state) => state.FeedCard.cards[id].chapters);
 
   return (
-    <Grid item xs={2}>
+    <Grid item={true} xs={4} sm={3} md={3} lg={2} xl={2}>
       <Fade in={true} timeout={{ enter: 600 }}>
         <Card elevation={6} className={classes.root}>
           <CardActionArea disableRipple>
-            <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseExit}>
+            <div
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseExit}
+              onTouchStart={handleTouchToggle}
+            >
               {doBlur ? (
                 // TODO: The Manga title and chapter list might look better if a Grid/GridItems are used rather than divs, look into this
                 <div>

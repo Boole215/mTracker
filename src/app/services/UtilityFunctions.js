@@ -16,4 +16,25 @@ function getIdealFontSize(titleLength) {
   return Math.min(Math.max(calculatedValue, 1.6), 2);
 }
 
-export { getIdealFontSize };
+/***
+ * returns the time at secondsSinceEpoch in the format
+ * "Month/Date/Year H/M/S"
+ * @param secondsSinceEpoch
+ * @returns {string}
+ */
+function formatTime(secondsSinceEpoch) {
+  if (secondsSinceEpoch == null) {
+    return "Never Updated";
+  } else {
+    const thisDate = new Date(secondsSinceEpoch);
+    return `${(thisDate.getMonth() + 1).toString()}/${thisDate
+      .getDate()
+      .toString()}/${thisDate.getFullYear().toString()}
+    ${thisDate.getHours().toString()}:${thisDate
+      .getMinutes()
+      .toString()}:${thisDate.getSeconds().toString()}
+    `;
+  }
+}
+
+export { getIdealFontSize, formatTime };

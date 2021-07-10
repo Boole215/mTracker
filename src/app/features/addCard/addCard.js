@@ -1,17 +1,15 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { openAddDialogue } from "./addCardSlice";
-import AddCircleRoundedIcon from "@material-ui/icons/AddCircleRounded";
-import IconButton from "@material-ui/core/IconButton";
+import AddIcon from "@material-ui/icons/Add";
 import makeStyles from "@material-ui/core/styles/makeStyles";
+import { Fab } from "@material-ui/core";
 
 const useStyles = makeStyles({
   addPos: {
     position: "fixed",
-    bottom: "1vw",
-    left: "95vw",
-    marginRight: 10,
-    marginBottom: 10,
+    right: "1vw",
+    bottom: "4vh",
   },
 });
 
@@ -23,13 +21,13 @@ export function AddCard() {
   };
 
   return (
-    <IconButton
+    <Fab
       size="medium"
       color="black"
       onClick={handleOpenAddDialogue}
       className={classes.addPos}
     >
-      <AddCircleRoundedIcon fontSize="large" />
-    </IconButton>
+      <AddIcon fontSize="large" />
+    </Fab>
   );
 }

@@ -3,11 +3,24 @@ import MangadexAPI from "../../services/MangadexAPI";
 import { getIdealFontSize } from "../../services/UtilityFunctions";
 import myIcon from "../../../assets/favicon.ico";
 
-// TODO: Add conditionals for if the series has already added
-//       as in, only make the chapter and cover calls.
+/***
+ * returns an object containing series/chapter/cover information
+ * or, an object stating that the series has already been added
+ * @param {string} seriesId
+ * @type {AsyncThunk<{alreadyAdded: boolean}|Object, void, {}>}
+ */
 export const fetchManga = createAsyncThunk(
   "feedcard/fetchManga",
-  async (seriesId) => {
+  async (seriesId, { getState }) => {
+    const state = getState();
+    console.log();
+
+    if (seriesId === "") {
+      return null;
+    }
+    if (Object.keys(state.FeedCard.cards).some((key) => key === seriesId)) {
+      return { alreadyAdded: true };
+    }
     let mangaResponse = await MangadexAPI.fetchMangaById(seriesId);
     const chapterResponse = await MangadexAPI.fetchChapter(seriesId);
 
@@ -25,6 +38,8 @@ export const fetchManga = createAsyncThunk(
       ...x,
       highlight: false,
     }));
+
+    mangaResponse["alreadyAdded"] = false;
 
     // The following lines will be used for testing the update function
     // They will remove the most recent entry, then move everything else up by one
@@ -86,6 +101,8 @@ export const feedCardSlice = createSlice({
         showInfo:false,
         */
     cards: {},
+    remove: [],
+    addingResult: null,
     cardCount: 0,
     loading: false,
   },
@@ -99,6 +116,33 @@ export const feedCardSlice = createSlice({
       state.cards[action.payload].showInfo = false;
     },
 
+    touchToggleBlur: (state, action) => {
+      state.cards[action.payload].showInfo =
+        !state.cards[action.payload].showInfo;
+    },
+    toggleRemoval: (state, action) => {
+      if (!state.cards[action.payload].remove) {
+        state.remove = [action.payload, ...state.remove];
+      } else {
+        state.remove = state.remove.filter((key) => key !== action.payload);
+      }
+
+      state.cards[action.payload].remove = !state.cards[action.payload].remove;
+    },
+    removeSeries: (state, action) => {
+      const retObj = Object.assign({}, state, {
+        cards: Object.keys(state.cards).reduce((result, key) => {
+          if (!state.remove.some((ignoreKey) => ignoreKey === key)) {
+            result[key] = state.cards[key];
+          }
+          return result;
+        }, {}),
+      });
+      state.cards = retObj.cards;
+    },
+    clearRemove: (state) => {
+      state.remove = [];
+    },
     mouseOverChapter: (state, action) => {
       state.cards[action.payload.seriesID].chapters[
         action.payload.chapterID
@@ -109,29 +153,59 @@ export const feedCardSlice = createSlice({
         action.payload.chapterID
       ].highlight = false;
     },
+    clearAddingResult: (state) => {
+      state.addingResult = "";
+    },
+    resetCardLatestChapter: (state, action) => {
+      state.cards[action.payload].mostRecentChapter = "0";
+    },
   },
   extraReducers: {
+    /* This reducer has two checks
+     *
+     *  First, it checks if the payload is valid
+     *  It should only ever be null if the input in the textField is empty
+     *  so fetchManga would immediately return null
+     *
+     *  Secondly, it checks to see if the card has already been added.
+     *  fetchManga checks using .some() if there's a key in the
+     *  cards[] array that's matching the seriesId.
+     *
+     *  If so, fetchManga terminates early by returning an object {alreadyAdded:true}
+     *
+     *  Should everything check out, a new entry is added to the array and it is
+     *  populated with chapter/series/cover information.
+     */
     [fetchManga.fulfilled]: (state, action) => {
-      // Pull things from action.payload to config
-      state.cards[action.payload["data"]["id"]] = {
-        seriesTitle: action.payload["data"]["attributes"]["title"]["en"],
-        coverLoc: action.payload["data"]["coverURL"],
-        seriesDesc: action.payload["data"]["attributes"]["description"]["en"],
-        chapters: action.payload["data"]["chapterList"],
-        mostRecentChapter:
-          action.payload["data"]["chapterList"].length !== 0
-            ? action.payload.data.chapterList["0"].data.attributes.chapter
-            : null,
-        titleSize: getIdealFontSize(
-          action.payload["data"]["attributes"]["title"]["en"].length
-        ),
-      };
-
-      state.cardCount += 1;
+      if (action.payload != null) {
+        if (!action.payload.alreadyAdded) {
+          // Pull things from action.payload to config
+          state.cards[action.payload["data"]["id"]] = {
+            seriesTitle: action.payload["data"]["attributes"]["title"]["en"],
+            coverLoc: action.payload["data"]["coverURL"],
+            seriesDesc:
+              action.payload["data"]["attributes"]["description"]["en"],
+            chapters: action.payload["data"]["chapterList"],
+            mostRecentChapter:
+              action.payload["data"]["chapterList"].length !== 0
+                ? action.payload.data.chapterList["0"].data.attributes.chapter
+                : null,
+            titleSize: getIdealFontSize(
+              action.payload["data"]["attributes"]["title"]["en"].length
+            ),
+            remove: false,
+          };
+          state.cardCount += 1;
+          state.addingResult = "Success";
+        } else {
+          state.addingResult = "Card is Already Present";
+        }
+      }
     },
     [fetchManga.rejected]: (state, action) => {
-      console.log("series failed");
-      // TODO Do something here
+      state.addingResult = "API Error";
+      console.log("fetchManga failed.");
+      //TODO log more detailed error info
     },
     [updateChapterList.fulfilled]: (state, action) => {
       state.cards[action.payload.seriesId].chapters =
@@ -147,6 +221,12 @@ export const {
   mouseOutside,
   mouseOverChapter,
   mouseNoLongerOverChapter,
+  touchToggleBlur,
+  clearAddingResult,
+  resetCardLatestChapter,
+  toggleRemoval,
+  removeSeries,
+  clearRemove,
 } = feedCardSlice.actions;
 
 export default feedCardSlice.reducer;
