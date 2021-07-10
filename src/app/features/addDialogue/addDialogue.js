@@ -4,7 +4,11 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { updateField, clearTextfield } from "./addDialogueSlice";
 import { closeAddDialogue } from "../addCard/addCardSlice";
-import { fetchManga, clearAddingResult } from "../card/cardSlice";
+import {
+  fetchManga,
+  clearAddingResult,
+  disableTutorial,
+} from "../card/cardSlice";
 import { AddCardTooltip } from "../addCardTooltip/addCardTooltip";
 
 // material-ui imports
@@ -46,11 +50,16 @@ export function AddDialogue() {
   let currentValue = useSelector((state) => state.AddDialogue.dialogueField);
   const classes = useStyles();
 
+  const showTutorial = useSelector((state) => state.FeedCard.showTutorial);
+
   // It seems like you need to dispatch reducers in an anonymous function in order
   // to prevent them from being dispatched upon component rendering
   const handleFetchManga = (e) => {
     e.preventDefault();
     dispatch(fetchManga(currentValue));
+    if (showTutorial) {
+      dispatch(disableTutorial());
+    }
     dispatch(closeAddDialogue);
   };
   const handleUpdateField = (e) => dispatch(updateField(e.target.value));

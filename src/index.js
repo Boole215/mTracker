@@ -1,9 +1,24 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./app/App";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
+import { persistStore } from "redux-persist";
+import store from "./app/store";
+
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 
-ReactDOM.render(<App />, document.getElementById("root"));
+import { LoadingScreen } from "./app/features/loadingScreen/loadingScreen";
+
+let persistor = persistStore(store);
+ReactDOM.render(
+  <Provider store={store}>
+    <PersistGate loading={<LoadingScreen />} persistor={persistor}>
+      <App />
+    </PersistGate>
+  </Provider>,
+  document.getElementById("root")
+);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

@@ -92,19 +92,11 @@ export const updateChapterList = createAsyncThunk(
 export const feedCardSlice = createSlice({
   name: "feedcard",
   initialState: {
-    /*
-        title:'placeholder',
-        chapters:[
-            "something"
-        ],
-        seriesID:"0",
-        showInfo:false,
-        */
     cards: {},
     remove: [],
     addingResult: null,
     cardCount: 0,
-    loading: false,
+    showTutorial: true,
   },
   reducers: {
     // mouse actions receive the card's ID as the payload in order to determine
@@ -129,7 +121,7 @@ export const feedCardSlice = createSlice({
 
       state.cards[action.payload].remove = !state.cards[action.payload].remove;
     },
-    removeSeries: (state, action) => {
+    removeSeries: (state) => {
       const retObj = Object.assign({}, state, {
         cards: Object.keys(state.cards).reduce((result, key) => {
           if (!state.remove.some((ignoreKey) => ignoreKey === key)) {
@@ -158,6 +150,9 @@ export const feedCardSlice = createSlice({
     },
     resetCardLatestChapter: (state, action) => {
       state.cards[action.payload].mostRecentChapter = "0";
+    },
+    disableTutorial: (state) => {
+      state.showTutorial = false;
     },
   },
   extraReducers: {
@@ -205,7 +200,7 @@ export const feedCardSlice = createSlice({
     [fetchManga.rejected]: (state, action) => {
       state.addingResult = "API Error";
       console.log("fetchManga failed.");
-      //TODO log more detailed error info
+      //TODO log more detailed error info, use action to get said info
     },
     [updateChapterList.fulfilled]: (state, action) => {
       state.cards[action.payload.seriesId].chapters =
@@ -227,6 +222,7 @@ export const {
   toggleRemoval,
   removeSeries,
   clearRemove,
+  disableTutorial,
 } = feedCardSlice.actions;
 
 export default feedCardSlice.reducer;
