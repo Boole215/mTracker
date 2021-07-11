@@ -6,10 +6,11 @@ export function CardGen() {
   const currentCards = Object.keys(
     useSelector((state) => state.FeedCard.cards)
   );
-  const cardLen = useSelector((state) => state.FeedCard.cardCount);
+  // This is moot since map won't generate anything if there's nothing in Cards
+  // const cardLen = useSelector((state) => state.FeedCard.cardCount);
 
   return (
     // If there's a nonzero amount of cards, then render them
-    cardLen > 0 ? currentCards.map((key) => <FeedCard id={key} />) : null
+    currentCards.map((key) => <FeedCard id={key} />)
   );
 }

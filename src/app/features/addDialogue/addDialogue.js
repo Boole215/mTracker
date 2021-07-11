@@ -1,20 +1,31 @@
 import React from "react";
-// Redux import
+
+// Redux/Reducer imports
 import { useSelector, useDispatch } from "react-redux";
-import { updateField } from "./addDialogueSlice";
+import { updateField, clearTextfield } from "./addDialogueSlice";
 import { closeAddDialogue } from "../addCard/addCardSlice";
-import { fetchManga } from "../card/cardSlice";
+import {
+  fetchManga,
+  clearAddingResult,
+  disableTutorial,
+} from "../card/cardSlice";
+import { AddCardTooltip } from "../addCardTooltip/addCardTooltip";
 
 // material-ui imports
-import makeStyles from "@material-ui/core/styles/makeStyles";
-import Button from "@material-ui/core/Button";
-import { Paper, Typography, TextField, IconButton } from "@material-ui/core";
-import CloseIcon from "@material-ui/icons/Close";
+import {
+  TextField,
+  Button,
+  makeStyles,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from "@material-ui/core";
 
 const useStyles = makeStyles({
   font: {
     fontFamily: "Roboto",
-    color: "black",
   },
   addDia: {
     position: "absolute",
@@ -36,43 +47,62 @@ const useStyles = makeStyles({
 export function AddDialogue() {
   const dispatch = useDispatch();
   const showThis = useSelector((state) => state.AddCard.addingFeed);
-  let currentValue = useSelector((state) => state.addDialogue.dialogueField);
+  let currentValue = useSelector((state) => state.AddDialogue.dialogueField);
   const classes = useStyles();
+
+  const showTutorial = useSelector((state) => state.FeedCard.showTutorial);
 
   // It seems like you need to dispatch reducers in an anonymous function in order
   // to prevent them from being dispatched upon component rendering
-  const handleFetchManga = () => dispatch(fetchManga(currentValue));
+  const handleFetchManga = (e) => {
+    e.preventDefault();
+    dispatch(fetchManga(currentValue));
+    if (showTutorial) {
+      dispatch(disableTutorial());
+    }
+    dispatch(closeAddDialogue);
+  };
   const handleUpdateField = (e) => dispatch(updateField(e.target.value));
+  const handleCloseAddDialogue = () => {
+    dispatch(closeAddDialogue());
+    dispatch(clearTextfield());
+    dispatch(clearAddingResult());
+  };
 
-  return showThis ? (
-    <Paper elevation={4} className={classes.addDia}>
-      <IconButton
-        size="medium"
-        onClick={() => {
-          dispatch(closeAddDialogue());
-        }}
-        className={classes.exit}
-      >
-        <CloseIcon fontSize="medium" />
-      </IconButton>
+  const addingResult = useSelector((state) => state.FeedCard.addingResult);
 
-      <Typography className={classes.font}>What is the series' ID?</Typography>
-
-      <form autoComplete="off">
-        <TextField
-          onChange={handleUpdateField}
-          valueid="inputID"
-          variant="outlined"
-          label="Series ID"
-        />
-        <Button
-          variant="contained"
-          onClick={handleFetchManga}
-          className={classes.addButton}
-        >
-          Add it!
-        </Button>
+  return (
+    <Dialog open={showThis} onClose={handleCloseAddDialogue}>
+      <DialogTitle>
+        Add Manga
+        <AddCardTooltip />
+      </DialogTitle>
+      <form onSubmit={handleFetchManga}>
+        <DialogContent>
+          <DialogContentText>
+            Please provide the ID of the series that you'd like to add
+          </DialogContentText>
+          <TextField
+            onChange={handleUpdateField}
+            valueid="inputID"
+            variant="outlined"
+            label="Series ID"
+            helperText={addingResult}
+            error={addingResult === "API Error"}
+            fullWidth
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button
+            //variant="contained"
+            type="submit"
+            //onClick={handleFetchManga}
+            className={classes.font}
+          >
+            Add it!
+          </Button>
+        </DialogActions>
       </form>
-    </Paper>
-  ) : null;
+    </Dialog>
+  );
 }

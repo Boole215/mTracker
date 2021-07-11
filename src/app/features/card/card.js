@@ -1,7 +1,7 @@
 import React from "react";
 // Redux import
 import { useSelector, useDispatch } from "react-redux";
-import { mouseInside, mouseOutside } from "./cardSlice";
+import { mouseInside, mouseOutside, touchToggleBlur } from "./cardSlice";
 
 // component import
 import { ChapterEntry } from "../chapterEntry/chapterEntry";
@@ -10,39 +10,54 @@ import { ChapterEntry } from "../chapterEntry/chapterEntry";
 
 // material-ui imports
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import Grid from "@material-ui/core/Grid";
-import Card from "@material-ui/core/Card";
-import CardMedia from "@material-ui/core/CardMedia";
-import CardActionArea from "@material-ui/core/CardActionArea";
-import Typography from "@material-ui/core/Typography";
-import List from "@material-ui/core/List";
-import ListSubheader from "@material-ui/core/ListSubheader";
+import {
+  Fade,
+  Grid,
+  CardMedia,
+  CardActionArea,
+  Typography,
+  List,
+  ListSubheader,
+  Card,
+} from "@material-ui/core";
 
 const useStyles = makeStyles({
   // TODO: Figure out how to make then rectangular cards,
   //       that are taller than they are wide. While
   //       maintaining image scale (clipping is ok)
+
+  // For some reason setting a minWidth and a minHeight rather than width/heights made the cards become
+  // smaller as you added more. Like, first card is normal sized, second card is a bit smaller, third card is
+  // even smaller etc. Like a matryoshka doll.
   root: {
     position: "relative",
-    maxWidth: 345,
-    width: "15vw",
+    // maxWidth looks good at 345
+    //maxWidth: 345,
+    minWidth: "10vw",
     height: "40vh",
+    maxWidth: "50vw",
+    maxHeight: "53.33vh",
     objectFit: "fill",
+    MuiButtonBase: { disableRipple: true },
   },
   media: {
-    height: "40vh",
-    width: "15vw",
-    objectFit: "fill",
+    //height: "40vh",
+    //width: "15vw",
+    minWidth: "15vw",
+    minHeight: "40vh",
+    maxWidth: "50vw",
+    maxHeight: "53.33vh",
+    objectFit: "cover",
   },
   blurImg: {
     filter: "blur(3px) brightness(50%)",
   },
-  font: {
-    paddingLeft: "15%",
-    top: "10%",
-    paddingRight: "15%",
+  seriesTitle: {
+    paddingLeft: "3.25vw",
+    paddingTop: "4vh",
+    paddingRight: "2.5vw",
     position: "absolute",
-    fontSize: "140%",
+    fontSize: "2vh",
     color: "white",
     fontFamily: "Roboto",
     zIndex: 1,
@@ -50,94 +65,109 @@ const useStyles = makeStyles({
   myList: {
     zIndex: 1,
     position: "absolute",
-    fontColor: "black",
     background: "none",
-    paddingTop: "40%",
-    paddingLeft: "10%",
+    paddingTop: "13vh",
+    paddingLeft: "3vw",
   },
   listHeader: {
     color: "White",
     fontFamily: "Roboto",
-    fontSize: "18px",
+    fontSize: "1.5vh",
   },
 });
 
 // add props to be access stuff
-export function FeedCard(props) {
+export function FeedCard({ id }) {
   const dispatch = useDispatch();
   const crntTitle = useSelector(
-    (state) => state.FeedCard.cards[props.id].seriesTitle
+    (state) => state.FeedCard.cards[id].seriesTitle
   );
-  const imageURL = useSelector(
-    (state) => state.FeedCard.cards[props.id].coverLoc
-  );
+  const imageURL = useSelector((state) => state.FeedCard.cards[id].coverLoc);
+  const titleSize = useSelector((state) => state.FeedCard.cards[id].titleSize);
 
-  const handleMouseEnter = () => dispatch(mouseInside(props.id));
-  const handleMouseExit = () => dispatch(mouseOutside(props.id));
+  const handleMouseEnter = () => dispatch(mouseInside(id));
+  const handleMouseExit = () => dispatch(mouseOutside(id));
+  const handleTouchToggle = () => dispatch(touchToggleBlur(id));
   /*const desc = useSelector(
     (state) => state.FeedCard.cards[props.id].seriesDesc
   );*/
-
+  let iterCount = 0;
   const classes = useStyles();
+  const innerFont = makeStyles({
+    dynamicTitle: {
+      fontSize: `${titleSize}vh!important`,
+    },
+  });
+  const innerClasses = innerFont();
 
   const doBlur = useSelector((state) =>
-    state.FeedCard.cards[props.id].showInfo ? classes.blurImg : null
+    state.FeedCard.cards[id].showInfo ? classes.blurImg : null
   );
 
-  const chapters = useSelector(
-    (state) => state.FeedCard.cards[props.id].chapters
-  );
+  const chapters = useSelector((state) => state.FeedCard.cards[id].chapters);
 
   return (
-    <Grid item xs={2}>
-      <Card elevation={3} className={classes.root}>
-        <CardActionArea>
-          <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseExit}>
-            {doBlur ? (
-              <div>
-                <Typography
-                  gutterBottom
-                  className={classes.font}
-                  variant="h5"
-                  component="h5"
-                >
-                  {crntTitle}
-                </Typography>
-                <List
-                  className={classes.myList}
-                  dense={true}
-                  disablePadding
-                  subheader={
-                    <ListSubheader
-                      component="div"
-                      id="nested-list-subheader"
-                      className={classes.listHeader}
-                    >
-                      Chapters
-                    </ListSubheader>
-                  }
-                >
-                  {Object.keys(chapters)
-                    .slice(0, 5)
-                    .map((key) => (
-                      <ChapterEntry
-                        chapterTitle={chapters[key].data.attributes.title}
-                        chapterNum={chapters[key].data.attributes.chapter}
-                      />
-                    ))}
-                </List>
-              </div>
-            ) : null}
-            {/*<CardMedia component="img" image={rotundCat} title="Large Cat" className={`${classes.media} ${doBlur ? classes.blurImg : null}`}/>*/}
-            <CardMedia
-              component="img"
-              image={imageURL}
-              title="Cover Image"
-              className={`${classes.media} ${doBlur ? classes.blurImg : null}`}
-            />
-          </div>
-        </CardActionArea>
-      </Card>
+    <Grid item={true} xs={4} sm={3} md={3} lg={2} xl={2}>
+      <Fade in={true} timeout={{ enter: 600 }}>
+        <Card elevation={6} className={classes.root}>
+          <CardActionArea disableRipple>
+            <div
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseExit}
+              onTouchStart={handleTouchToggle}
+            >
+              {doBlur ? (
+                // TODO: The Manga title and chapter list might look better if a Grid/GridItems are used rather than divs, look into this
+                <div>
+                  <Typography
+                    gutterBottom
+                    className={`${classes.seriesTitle} ${innerClasses.dynamicTitle}`}
+                    variant="h5"
+                    component="h5"
+                  >
+                    {crntTitle}
+                  </Typography>
+                  <List
+                    className={classes.myList}
+                    dense={true}
+                    disablePadding
+                    subheader={
+                      <ListSubheader
+                        component="div"
+                        id="nested-list-subheader"
+                        className={`${classes.listHeader} `}
+                      >
+                        Chapters
+                      </ListSubheader>
+                    }
+                  >
+                    {Object.keys(chapters)
+                      .slice(0, 5)
+                      .map((key) => (
+                        <ChapterEntry
+                          chapterTitle={chapters[key].data.attributes.title}
+                          chapterNum={chapters[key].data.attributes.chapter}
+                          chapterID={chapters[key].data.id}
+                          seriesID={id}
+                          iter={iterCount++}
+                        />
+                      ))}
+                  </List>
+                </div>
+              ) : null}
+              {/*<CardMedia component="img" image={rotundCat} title="Large Cat" className={`${classes.media} ${doBlur ? classes.blurImg : null}`}/>*/}
+              <CardMedia
+                component="img"
+                image={imageURL}
+                title="Cover Image"
+                className={`${classes.media} ${
+                  doBlur ? classes.blurImg : null
+                }`}
+              />
+            </div>
+          </CardActionArea>
+        </Card>
+      </Fade>
     </Grid>
   );
 }
